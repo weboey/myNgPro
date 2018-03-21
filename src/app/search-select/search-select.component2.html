@@ -1,0 +1,14 @@
+<div class="search-select-container">
+  <div class="search-select-head">
+    <input #inputElement type="text" class="ant-select-search__field"
+           (blur)="doClose()"  (keyup)="doSearch($event.target.value)"
+           [ngModel]="inputValue"  (click)="toggleShowHandler()">
+  </div>
+  <div class="search-select-content">
+    <ul class="search-dropdown-menu" *ngIf="toggleShow">
+      <li *ngFor="let item of [1,2,3,4,5,6,7,8]; let i = index"
+          (click)="doSelectItem(item)"
+          [class.item-selected]="selectedIndex === i">{{item}}</li>
+    </ul>
+  </div>
+</div>

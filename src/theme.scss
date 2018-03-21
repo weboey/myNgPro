@@ -1,0 +1,147 @@
+// 表头颜色
+$TableHeaderColor: #205757;
+
+// 表身奇数颜色
+$TableBodyOddColor: #18191a;
+
+  // 表身偶数颜色
+$TableBodyEvenColor: #232628;
+
+/*body背景颜色*/
+$bodyBackgroundColor:#000;
+/*body字颜色*/
+$bodyColor:#f9ecd5;
+/*input颜色*/
+$inputBackgroundColor:#47515a;
+/*input-placeholder*/
+$input-placeholderColor:#fde8c2;
+/*保存和搜索按钮颜色*/
+$saveButton:rgba(81, 171, 160, 1);
+/*保存和搜索按钮颜色:hover*/
+$saveButtonHover: rgb(102, 177, 168);
+/*返回按钮颜色*/
+$backButton:rgba(26, 68, 68, 1);
+/*返回按钮颜色:hover*/
+$backButtonHover: rgba(33, 79, 79, 1);
+/*创建按钮*/
+$createButton:rgba(70, 185, 144, 1);
+/*创建按钮:hover*/
+$createButtonHover:rgba(83, 197, 157, 1);
+/*上传按钮*/
+$uploadButton:rgba(189, 97, 28, 1);
+/*上传按钮:hover*/
+$uploadButtonHover:rgba(216, 119, 42, 1);
+/*邮件按钮*/
+$emailButton:rgba(68, 145, 213, 1);
+/*邮件按钮:hover*/
+$emailButtonHover:rgba(78, 167, 227, 1);
+/*编辑用户按钮*/
+$editUserButton: rgba(236, 101, 76, 1);
+/*编辑用户按钮:hover*/
+$editUserButtonHover:#f67057;
+/*面包屑和菜单字体颜色*/
+$breadcrumbColor:#f3e0bf;
+/*日期组件选中颜色*/
+$calendarSelected:#ff900c;
+/*日期组件头和底背景色*/
+$calendarHeader:#1a4444 ;
+/*日期组件input背景色*/
+$calendarInput: #47515a;
+/*日期选择月份背景色*/
+$calendarTable: #031b1d;
+/*日期组件不可点背景颜色*/
+$calendarDisabled:transparent;
+/*日期组件不可点字体颜色*/
+$calendarDisabledColor:#999;
+/*分页选择菜单跳转页面input*/
+$selectMenu:#191a1a;
+
+/*分页选择菜单hover和分页选择当前页背景颜色*/
+$selectMenuBk:#47515a;
+$selectMenuHover:#194141;
+/*选择颜色*/
+$selectDateColor:#f3e0bf;
+/*头部和头部菜单背景色*/
+$menuColor: rgba(27, 51, 51, 1);
+/*头部菜单背景色hover*/
+$menuColorHover:#007b7c;
+/*头部项目标题颜色*/
+$projectTitleColor: #ff900d;
+/*头部字体颜色*/
+$headerColor:#f3e0bf;
+/*消息背景色*/
+$messageNotice:rgba(26, 68, 68, 1);
+/*tabBane*/
+$tabNameColor: #ff900d;
+
+/*-------------------------公共首页样式颜色start-------------------------------*/
+/*投标颜色*/
+$bindPageColor:#295872;
+/*投标颜色:hover*/
+$bindPageColorHover:#1579b0;
+/*资金头寸*/
+$funkPageColor:#346450;
+/*资金头寸:hover*/
+$funkPageColorHover:#438c6e;
+/*交易管理*/
+$transactionPage:#3f2f51;
+/*交易管理:hover*/
+$transactionPageHover:#67379a;
+/*机构画像*/
+$institutionalPage:#2a5c5c;
+/*机构画像:hover*/
+$institutionalPageHover:#057b7b;
+/*CRM*/
+$crmPage:#765642;
+/*CRM:hover*/
+$crmPageHover:#ad6131;
+/*债券管理*/
+$bondPage:#8b7852;
+/*债券管理:hover*/
+$bondPageHover:#a5916a;
+/*首页系统标签背景色*/
+$sysDataBackgroundColor:#2c3134;
+/*首页系统标签字体颜色*/
+$sysDataColor:#ff900d;
+/*-------------------------公共首页样式颜色end---------------------------------*/
+/*页面内容背景色*/
+$pageDataBackgroundColor: rgba(18, 23, 22, 1);
+/*页面边框颜色*/
+$pageDataBorderColor: rgba(35, 81, 83, 1);
+/*未读消息颜色*/
+$noView:#ff900d;
+/*------------------消息详情start------------*/
+$messageBodyBackgroundColor:#142222;
+$messageBodyBorderColor:#1a4444;
+/*------------------消息详情end--------------*/
+/*------------------login 样式start----------*/
+$loginTitle:rgba(26, 68, 68, 0.9);
+/*登录表单input背景色*/
+$loginFormBg:#00b4ef;
+/*登录表单头部*/
+$loginFormHeaderBg:#174444;
+/*登录表单body*/
+$loginFormBodyBg:rgba(9, 28, 28, 0.9);
+/*------------------login 样式end----------*/
+/*用户头像上传*/
+$userImageUpload:rgba(26,68,68,.9);
+
+/*提示消息背景*/
+$messageTipBg:#0c4242;
+/*成功提示*/
+$successMessage:#00b46a;
+/*失败提示*/
+$failMessage: #d23939;
+/*警告提示*/
+$importMessage:#f66025;
+/*确认提示*/
+$sureMessage:#e8b474;
+
+/*导航前的竖线*/
+$gapColor: #1b3333;
+/*导航字体*/
+$commonColor:  #a0a0a0;
+/*表格box颜色*/
+$tableBox: #235153;
+/*二级table页背景色*/
+$level2-tab: #45a095;

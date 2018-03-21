@@ -1,0 +1,20 @@
+<div class="search_main">
+  <div class="search_input">
+    <input type="text" (input)="foucsInput($event)" placeholder="'示范课搜索'"
+           [(ngModel)]='organization'  (blur)="cancelInput(organization)" [placeholder]="tip_name"
+           (keydown)="keyboardSelectBond($event)" #input>
+    <span *ngIf="input.value" class="clearBtnSummary" (click)="clearValue1($event)"></span>
+    <span *ngIf="!input.value" class="clearBtnHidden"></span>
+    <!--<ul class="searchTip" *ngIf="showTip">-->
+      <!--<li *ngFor="let item of tipInfo; let i = index" [class.select]="SelectInstIndex === i"-->
+          <!--(click)="selectbondName(item)">{{item.bond_shortname}}-->
+      <!--</li>-->
+    <!--</ul>-->
+  </div>
+  <ul class="search-dropdown-menu">
+    <li *ngFor="let i of mockDate">{{i}}</li>
+  </ul>
+  <button type="button" class="cursor_btn search_button" (click)='buttonSearch(organization)'
+          style="margin-left: 10px;">{{search_name}}
+  </button>
+</div>

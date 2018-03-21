@@ -1,0 +1,10 @@
+<nz-tooltip nzTrigger="hover" nzPlacement="topLeft" nzOverlayClassName="numeric-input" [nzTitle]="title">
+  <nz-input-group nzSearch>
+    <input #inputElement nz-input nz-tooltip placeholder="Input a number"
+           [ngModel]="value"
+           nzSearch="true"
+           (ngModelChange)="onChange($event)"
+           (blur)="onBlur()">
+  </nz-input-group>
+
+</nz-tooltip>
