@@ -15,4 +15,12 @@ export class AppComponent {
       this.inpArr.push(i);
     }
   }
+
+  doSearch(val){
+    console.log("out pull==>"+val);
+  }
+
+  doOpen(isOpen){
+    console.log("out pull==>"+isOpen);
+  }
 }

@@ -1,35 +1,56 @@
-import { Component, OnInit, Input, Output, EventEmitter ,ViewChild} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-
+import { Component, OnInit, Input, Output, EventEmitter ,ViewChild,ElementRef,AfterContentInit,ContentChildren,
+  Directive,QueryList} from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/operator/switch";
 import "rxjs/add/operator/filter";
+
+@Directive({ selector: 'li' })
+export class ListItem {}
+
 @Component({
   selector: 'app-search-select',
   templateUrl: './search-select.component2.html',
-  styleUrls: ['./search-select.component2.scss']
+  styleUrls: ['./search-select.component2.scss'],
 })
-export class SearchSelectComponent implements OnInit {
+export class SearchSelectComponent implements OnInit,AfterContentInit {
+
 
   inputValue:string="";
   selectedIndex:number=0;
   toggleShow:boolean=false;
   mockDate=[1,2,3,4,5,6,7,8];
 
+  @Output()
+  nzSearchChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  nzOpenChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input()
+  nzNotFoundContent:any;
+  @Input()
+  nzPlaceHolder:string="";
   private searchText$ = new Subject<string>();
 
-  @ViewChild("inputElement")
-  inpElement: HTMLElement;
+  @ViewChild("inputElement") inpElementRef: ElementRef;
+
+  @ContentChildren(ListItem) items: QueryList<ListItem>;
 
   onKeyDownInput(e){
     console.log(e);
   }
 
+  ngAfterContentInit():void {
+    // do something with list items
+    console.log(this.items);
+
+  }
+
   toggleShowHandler(){
     this.toggleShow=!this.toggleShow;
+    this.nzOpenChange.emit(this.toggleShow);
   }
 
   doSelectItem(selected){
@@ -46,7 +67,6 @@ export class SearchSelectComponent implements OnInit {
       this.toggleShow=false;
     },200)
   }
-
 
 
   updateInputVal(newVal){
@@ -87,19 +107,27 @@ export class SearchSelectComponent implements OnInit {
   constructor() { }
 
 
-
   ngOnInit() {
-    console.log(11);
-    console.log(this.inpElement);
     // const input$ = Observable.fromEvent<KeyboardEvent>(this.inpElement["nativeElement"], 'keydown');
-
-    this.searchText$
-      .debounceTime(300)
-      .filter(r => r !== '')
+    //this.searchText$
+    //  .debounceTime(300)
+    //  .filter(r => r !== '')
+    //  .distinctUntilChanged()
+    //  .switch()
+    //  .subscribe(inp=>console.log(inp))
+    let inpuyKeyUp$ = Observable.fromEvent(this.inpElementRef.nativeElement, 'keyup')
+      .map((e: any) => e.target.value) // extract the value of the input
+      .filter((text: string) => text!='') // filter out if empty
+      .do((val)=>console.log(val))
+      .debounceTime(250) // only once every 250ms
       .distinctUntilChanged()
-      .switch()
-      .subscribe(inp=>console.log(inp))
-
+      // act on the return of the search
+      .subscribe(
+        inpVal => { // on sucesss
+          console.log(inpVal);
+          this.nzSearchChange.next(inpVal);
+        }
+      );
   }
 
 
