@@ -13,7 +13,44 @@
 
 <!--<app-select-search ></app-select-search>-->
 
-<app-search-select (nzSearchChange)="doSearch($event)" (nzOpenChange)="doOpen($event)"
-                   [nzNotFoundContent]="'not found innn'" [nzPlaceHolder]="'please select search'">
-    <li *ngFor="let item of [1,2,3,4,5,6,7,8]">{{item}}</li>
-</app-search-select>
+
+
+<div style="padding: 100px">
+  <div style="margin-bottom: 100px">
+    <nz-select
+      [nz-tooltip]="initVal.name"
+      style="width: 120px;"
+      nzAllowClear
+      nzShowSearch
+      [nzFilter]="false"
+      [(ngModel)]="initVal.name"
+      (nzOpenChange)="doOpen($event)"
+      (nzSearchChange)="doSearch($event)"
+      (ngModelChange)="change($event)"
+      [nzNotFoundContent]="'无法找到'"
+      [nzDisabled]="isDisable">
+      <ng-container>
+        <nz-option
+          *ngFor="let option of mockDate"
+          [nzLabel]="option.bond_shortname"
+          [nzValue]="option.bond_shortname">
+        </nz-option>
+      </ng-container>
+    </nz-select>
+  </div>
+
+  <app-search-select style="width: 120px;" (nzSearchChange)="doSearch($event)" (nzOpenChange)="doOpen($event)"
+                     (ngModelChange)="change($event)"
+                     [nz-tooltip]="initVal.name"
+                     nzAllowClear
+                     [(value)]="initVal.name"
+                     [nzDisabled]="isDisable"
+                     [data]="mockDate"
+                     [nzNotFoundContent]="'not found innn'" [nzPlaceHolder]="'please select search'"  [nzOptionLabel]="'bond_shortname'">
+
+  </app-search-select>
+  {{initVal.name}}
+  <button (click)="test()">change</button>
+  <button (click)="isDisable=!isDisable">change</button>
+</div>
+

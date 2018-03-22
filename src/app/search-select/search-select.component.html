@@ -1,20 +1,22 @@
-<div class="search_main">
-  <div class="search_input">
-    <input type="text" (input)="foucsInput($event)" placeholder="'示范课搜索'"
-           [(ngModel)]='organization'  (blur)="cancelInput(organization)" [placeholder]="tip_name"
-           (keydown)="keyboardSelectBond($event)" #input>
-    <span *ngIf="input.value" class="clearBtnSummary" (click)="clearValue1($event)"></span>
-    <span *ngIf="!input.value" class="clearBtnHidden"></span>
-    <!--<ul class="searchTip" *ngIf="showTip">-->
-      <!--<li *ngFor="let item of tipInfo; let i = index" [class.select]="SelectInstIndex === i"-->
-          <!--(click)="selectbondName(item)">{{item.bond_shortname}}-->
-      <!--</li>-->
-    <!--</ul>-->
+<div class="search-select-container">  <!---->
+  <div class="search-select-head" (mouseover)="_showClear($event)"  [class.disabled]="_disabled"
+       (mouseout)="_hiddenClear($event)" >
+    <div class="ant-select__placeholder" [hidden]="!_optionListShow">{{nzPlaceHolder}}</div>
+    <input #inputElement type="text" title [readonly]="_disabled" [hidden]="_optionListShow"
+           (keydown)="onKeyDownChangeSelected($event)" 
+           [(ngModel)]="value"    autofocus>
+    <span *ngIf="_allowClear" class="select-selection-clear" [hidden]="!_clearIcon"  (click)="onClearSelected($event)">
+      <i class="anticon anticon-close-circle-o"></i></span>
+    <span class="ant-select-arrow">
+      <i class="anticon anticon-down"></i></span>
   </div>
-  <ul class="search-dropdown-menu">
-    <li *ngFor="let i of mockDate">{{i}}</li>
-  </ul>
-  <button type="button" class="cursor_btn search_button" (click)='buttonSearch(organization)'
-          style="margin-left: 10px;">{{search_name}}
-  </button>
+
+  <div class="search-select-content" *ngIf="_optionListShow">
+    <ul class="search-dropdown-menu" >
+      <!--<ng-content></ng-content>-->
+      <li *ngFor="let item of data; let i = index" (click)="_updateSelectedOption(item)"
+          [class.item-selected]="selectedIndex === i">{{item[nzOptionLabel]}}</li>
+    </ul>
+    <div *ngIf="!data.length && value">{{nzNotFoundContent}}</div>
+  </div>
 </div>

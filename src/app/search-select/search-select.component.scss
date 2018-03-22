@@ -1,59 +1,94 @@
-@import "../../theme";
-.search_main{
-  display: flex;
-  .search_input{
-    width: 210px;
+
+.search-select-container{
+  display: block;
+  background-color: #fff;
+  position: relative;
+  border: 1px solid #ddd;border-radius: 4px;
+  .search-select-head{
+    background-color: inherit;
+    cursor: pointer;
+    display: block;
     position: relative;
-    display: flex;
-    input{
-      padding: 0 30px 0 6px;
-      width: 200px;
-      height: 28px !important;
-      line-height: 28px;
-      background: $inputBackgroundColor;
-      border-radius: 2px;
-    }
-    input::-webkit-input-placeholder{
-      color:$input-placeholderColor;
-    }
-    .clearBtnSummary{
-      transform: translate(-25px, 10px);
-      display: inline-block;
-      width: 11px !important;
-      height: 11px !important;
-      cursor: pointer;
-    }
-    .clearBtnHidden{
-      display: inline-block;
-      width: 11px !important;
-      height: 11px !important;
-      cursor: pointer;
-      transform: translate(-25px, 13px);
-    }
-    .searchTip{
-      position: absolute;
-      left: 0;
-      top: 32px;
-      background: #232628;
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      z-index: 10;
-      margin: 0;
-      padding: 0;
-      width: 200px;
-      cursor: pointer;
-      .select {
-        background-color: #274444;
-      }
-      li:hover {
-        background-color: #274444;
-      }
-    }
-  }
-  .search_button{
-    padding: 0 8px;
-    background: #51aba0;
+    margin: 0 7px;
     height: 28px;
     line-height: 28px;
-    border-radius: 2px;
+    &.disabled:hover,&.disabled:hover input{
+      cursor: not-allowed;
+    }
+    input{
+      background-color: inherit;
+      border: none;
+      outline: none;
+      //color: #f3e0bf;
+      cursor: pointer;
+      color: #333;
+      float: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+      padding-right: 14px;
+    }
+    .select-selection-clear{
+      position: absolute;
+      z-index: 9;
+      background-color: #fff;
+      right: 0px;
+    }
+    .ant-select__placeholder{
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 9px;
+      color: #bfbfbf;
+      line-height: 20px;
+      height: 20px;
+      max-width: 100%;
+      margin-top: -10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+    }
+    .ant-select-arrow{
+      right: 0;
+    }
   }
+  .search-select-content{
+    ul.search-dropdown-menu{
+      outline: none;
+      position: absolute;
+      min-width: 120px;
+      top: 33px;
+      left: 0;
+      z-index: 9;
+      margin-bottom: 0;
+      padding-left: 0;
+      list-style: none;
+      max-height: 250px;
+      overflow: auto;
+      background-color: #191a1a;
+      li{
+        color: #f9ecd5!important;
+        line-height: 1.5;
+        position: relative;
+        display: block;
+        padding: 7px 8px;
+        font-weight: normal;
+        white-space: nowrap;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background 0.3s ease;
+        &:hover{
+          background-color: #194141!important;
+        }
+      }
+    }
+  }
+
+}
+
+.item-selected{
+  background-color: #194141!important;
 }
