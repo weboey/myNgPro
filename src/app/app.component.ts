@@ -17,6 +17,7 @@ export class AppComponent {
   }
 
   doSearch(val){
+    console.log("nzSearch!!!!");
     console.log("Search==>"+val);
     console.log(this.initVal);
     if(val!=""){
@@ -34,9 +35,11 @@ export class AppComponent {
     this.initVal={name:"00资金509"};
   }
   doOpen(isOpen){
+    console.log("nzOpen!!!!");
     console.log("Open==>"+isOpen);
   }
   change(val){
+    console.log("nzModelChange!!!!");
     console.log("change"+val);
   }
   isDisable=false;
@@ -64,6 +67,12 @@ export class AppComponent {
     "bond_shortname": "00资金509",
   }, {
     "bond_shortname": "00资金809",
+  }, {
+    "bond_shortname": "00资金3109",
+  }, {
+    "bond_shortname": "00资金5209",
+  }, {
+    "bond_shortname": "00资金8309",
   }];
 
 }

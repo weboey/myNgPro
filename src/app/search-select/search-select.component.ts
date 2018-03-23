@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter ,OnDestroy,ViewChild,ElementRef,AfterContentInit,ContentChildren,
+import { Component, OnInit, Input, Output, EventEmitter ,Renderer2,OnDestroy,ViewChild,ElementRef,NgZone,AfterContentInit,ContentChildren,
   Directive,QueryList} from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { coerceBooleanProperty} from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/operator/switch";
 import "rxjs/add/operator/filter";
-import { coerceBooleanProperty} from '@angular/cdk/coercion';
+
 
 @Directive({ selector: 'li' })
 export class ListItem {}
@@ -24,14 +24,16 @@ export class ListItem {}
 export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy {
 
   selectedIndex:number=0;
+  keyDownIndex:number=0;
   _optionListShow:boolean=false;
+  private _documentListen: Function; // document事件解绑函数
 
   @Output()
   nzSearchChange: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   nzOpenChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output()
-  ngModelChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  nzModelChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Input()
   nzNotFoundContent:any;
@@ -42,16 +44,18 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
   @Input()
   nzOptionValue:string;
 
-  private _value: any; // select表单值
+  private _value: any; // select value 双向绑定
   @Output() valueChange = new EventEmitter();
   @Input()
   public get value(): any {
     return this._value;
   }
   public set value(newValue: any) {
-    //this.writeValue(newValue);
-    this._value=newValue;
-    this.valueChange.emit(this.value);
+    if (newValue !== this._value) {
+      this._value=newValue;
+      this._initSelectOption();
+      this.valueChange.emit(this.value);
+    }
   }
 
   private _data: Array<object>=[];
@@ -61,15 +65,10 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
   }
   public set data(value: Array<object> | object[]) {
     this._data = value instanceof Array ? value : new Array(value);
-    let selectedItem=this.data.find(item=>{
-      console.log(item[this.nzOptionLabel],this.value);
-      return item[this.nzOptionLabel]==this.value
-    })
-    this.selectedIndex=this.data.indexOf(selectedItem);
+    this._initSelectOption();
   }
 
-
-  constructor() { }
+  constructor(private _renderer: Renderer2,private _elementRef: ElementRef,private _ngZone: NgZone) { }
 
   _allowClear = false;
   _disabled = false;
@@ -91,7 +90,7 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
 
   _showClear(event: Event){
     event.stopPropagation();
-    if(this._value==null || this._value=='' || this._disabled){
+    if(this._value==null || this._value=='' || this._disabled || this._optionListShow){
       return
     }
     this._clearIcon=true;
@@ -99,6 +98,16 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
   _hiddenClear(event: Event){
     event.stopPropagation();
     this._clearIcon=false;
+  }
+
+  private _searchVal:string;
+  clearPlaceholder(searchVal:string){
+    this._searchVal=searchVal;
+    if(searchVal.length){
+      this.nzPlaceHolder="";
+    }else{
+      this.nzPlaceHolder=this.value;
+    }
   }
 
   private sub$: any;
@@ -116,83 +125,102 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
     }
     this._clearIcon=false;
     this._optionListShow =! this._optionListShow;
-    this.nzOpenChange.emit(this._optionListShow);
     if(this._optionListShow){
       this.nzPlaceHolder=this.value;
+      this.keyDownIndex=this.selectedIndex;
+      this._documentListen = this._renderer.listen('document', 'click', () => {
+        this._optionListShow = false;
+        this._documentListen();
+        this._documentListen = null;
+      });
+      setTimeout(()=>{
+        this.inpElementRef.nativeElement.value="";
+        this.inpElementRef.nativeElement.focus();
+      },0)
     }else{
-
+      this._documentListen();
     }
-    // if (this._$optionListHidden) {
-    //   this._documentListen();
-    // } else {
-    //   this._documentListen = this._renderer.listen('document', 'click', () => {
-    //     this._$optionListHidden = true;
-    //     this._documentListen();
-    //     this._documentListen = null;
-    //   });
-    // }
+    this.nzOpenChange.emit(this._optionListShow);
   }
 
   onClearSelected(event){
     event.stopPropagation();
-    this._value=null;
+    this.value=null;
+    this.nzModelChange.emit(this.value);
   }
 
-
+  //初始化高亮已选择项
+  _initSelectOption(){
+    let selectedItem=this.data.find(item=>{
+      return item[this.nzOptionLabel]==this.value
+    })
+    this.selectedIndex=this.data.indexOf(selectedItem);
+  }
   //更改option选中状态
   _updateSelectedOption(selected){
     this._updateInputVal(selected);
     this.selectedIndex=this.data.indexOf(selected);
   }
-  //关闭下拉面板
-  _closeOptionContent(){
-    setTimeout(()=>{
-      this._optionListShow=false;
-    },200)
-  }
 
   //更新input值
   _updateInputVal(newVal){
     this.value=newVal[this.nzOptionLabel];
-    this.ngModelChange.emit(this.value);
+    this.nzModelChange.emit(this.value);
   }
 
   ngOnInit() {
     this.sub$ = Observable.fromEvent<KeyboardEvent>(this.inpElementRef.nativeElement, 'keyup')
       .map((e: any) => e.target.value)
-      // .filter((text: string) => text!='') // filter out if empty
-      .do((val)=>console.log(val))
+      // .filter((text: string) => text!='')
       .debounceTime(300)
       .distinctUntilChanged()
       .subscribe(
-        inpVal => {
-          console.log(inpVal);
-          this.nzSearchChange.next(inpVal);
+        inputVal => {
+          this.nzSearchChange.next(inputVal);
         }
       );
   }
 
-  //键盘上下选择
-  onKeyDownChangeSelected(event) {
-    if (this._optionListShow && event.keyCode === 38) {
-      this.selectedIndex = this.selectedIndex ? this.selectedIndex - 1 : this.data.length - 1;
-      if (this.selectedIndex < 0) {
-        this.selectedIndex = this.data.length - 1;
-      }
-    } else if (this._optionListShow && event.keyCode === 40) {
-      this.selectedIndex = this.selectedIndex || this.selectedIndex === 0 ? this.selectedIndex + 1 : 0;
-      if (this.selectedIndex > this.data.length - 1) {
-        this.selectedIndex = 0;
-      }
+  get isNotFoundDisplay():boolean{
+    return !this.data.length && !!this._searchVal
+  }
 
+  //键盘上下选择
+  onKeyDownChangeSelected(event:KeyboardEvent) {
+    if (this._optionListShow && event.keyCode === 38) {
+      this.keyDownIndex = this.keyDownIndex ? this.keyDownIndex - 1 : this.data.length - 1;
+      if (this.keyDownIndex < 0) {
+        this.keyDownIndex = this.data.length - 1;
+      }
+      this._scrollIntoView();
+    } else if (this._optionListShow && event.keyCode === 40) {
+      this.keyDownIndex = this.keyDownIndex || this.keyDownIndex === 0 ? this.keyDownIndex + 1 : 0;
+      if (this.keyDownIndex > this.data.length - 1) {
+        this.keyDownIndex = 0;
+      }
+      this._scrollIntoView();
     } else if (this._optionListShow && event.keyCode === 13) {
       event.preventDefault();
-      this._updateSelectedOption(this.data[this.selectedIndex]);
+      this._updateSelectedOption(this.data[this.keyDownIndex]);
       this._optionListShow=false;
+    }
+  }
+
+  _scrollIntoView(): void {
+    if (this.data && this.data.length) {
+      this._ngZone.runOutsideAngular(() => {
+        setTimeout(() => {
+          const targetLi = this._elementRef.nativeElement.querySelector(".item-keydown-selected");
+          targetLi && targetLi.scrollIntoViewIfNeeded && targetLi.scrollIntoViewIfNeeded(false)
+        }, 0);
+      });
     }
   }
 
   ngOnDestroy(): void {
     this.sub$.unsubscribe();
+    if (this._documentListen) {
+      this._documentListen();
+    }
   }
 }
