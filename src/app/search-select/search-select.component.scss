@@ -5,7 +5,8 @@
   position: relative;
   border: 1px solid #ddd;
   border-radius: 4px;
-  .search-select-head{
+  height: 100%;
+  .select-head{
     background-color: inherit;
     cursor: pointer;
     display: block;
@@ -74,7 +75,7 @@
       width: 0;
     }
   }
-  .search-select-content{
+  .select-options-content{
     background-color: #fff;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
     border-radius: 4px;

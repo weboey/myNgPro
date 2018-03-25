@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter ,Renderer2,OnDestroy,ViewChild,ElementRef,NgZone,AfterContentInit,ContentChildren,
+import { Component, OnInit, Input, Output, EventEmitter ,Renderer2,OnDestroy,AfterViewInit,ViewChild,ElementRef,NgZone,AfterContentInit,ContentChildren,
   Directive,QueryList} from '@angular/core';
 import { coerceBooleanProperty} from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
@@ -21,12 +21,13 @@ export class ListItem {}
     "(click)": "_toggleClick($event)",
   }
 })
-export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy {
+export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy,AfterViewInit {
 
   selectedIndex:number=0;
   keyDownIndex:number=0;
   _optionListShow:boolean=false;
   private _documentListen: Function; // document事件解绑函数
+  private _initialized:boolean=false;
 
   @Output()
   nzSearchChange: EventEmitter<any> = new EventEmitter<any>();
@@ -52,9 +53,16 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
   }
   public set value(newValue: any) {
     if (newValue !== this._value) {
-      this._value=newValue;
+      this.writeValue(newValue);
+    }
+  }
+
+  public writeValue(value:any):void{
+    this._value=value;
+    if(this._initialized){
       this._initSelectOption();
       this.valueChange.emit(this.value);
+      this.nzModelChange.emit(this.value);
     }
   }
 
@@ -118,6 +126,12 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
     console.log(this.items);
   }
 
+  ngAfterViewInit() {
+    if (this.value) {
+      this._initSelectOption();
+    }
+  }
+
   _toggleClick(event: Event){
     event.stopPropagation();
     if(this._disabled){
@@ -146,7 +160,6 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
   onClearSelected(event){
     event.stopPropagation();
     this.value=null;
-    this.nzModelChange.emit(this.value);
   }
 
   //初始化高亮已选择项
@@ -161,14 +174,13 @@ export class SearchSelectComponent implements OnInit,AfterContentInit,OnDestroy 
     this._updateInputVal(selected);
     this.selectedIndex=this.data.indexOf(selected);
   }
-
   //更新input值
   _updateInputVal(newVal){
     this.value=newVal[this.nzOptionLabel];
-    this.nzModelChange.emit(this.value);
   }
 
   ngOnInit() {
+    this._initialized=true;
     this.sub$ = Observable.fromEvent<KeyboardEvent>(this.inpElementRef.nativeElement, 'keyup')
       .map((e: any) => e.target.value)
       // .filter((text: string) => text!='')

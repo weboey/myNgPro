@@ -1,5 +1,5 @@
 <div class="search-select-container" [class.select-open]="_optionListShow" >  <!--(blur)="_closeOptionContent()"-->
-  <div class="search-select-head" (mouseover)="_showClear($event)" (keydown)="onKeyDownChangeSelected($event)" [class.disabled]="_disabled"
+  <div class="select-head" (mouseover)="_showClear($event)" (keydown)="onKeyDownChangeSelected($event)" [class.disabled]="_disabled"
        (mouseout)="_hiddenClear($event)" >
     <div class="ant-select-selection__placeholder" [hidden]="!_optionListShow">{{nzPlaceHolder}}</div>
     <input type="text"  [hidden]="_optionListShow"
@@ -13,7 +13,7 @@
     <span class="ant-select-arrow" [hidden]="_clearIcon"></span>
   </div>
 
-  <div class="search-select-content" *ngIf="_optionListShow">
+  <div class="select-options-content" *ngIf="_optionListShow">
     <ul class="search-dropdown-menu" >
       <!--<ng-content></ng-content>-->
       <li *ngIf="isNotFoundDisplay" class="not-found">{{nzNotFoundContent}}</li>
