@@ -1,4 +1,5 @@
-<div class="search-select-container" [class.select-open]="_optionListShow" >  <!--(blur)="_closeOptionContent()"-->
+<div class="search-select-container ant-select" [class.select-open]="_optionListShow"
+     cdkOverlayOrigin>
   <div class="select-head" (mouseover)="_showClear($event)" (keydown)="onKeyDownChangeSelected($event)" [class.disabled]="_disabled"
        (mouseout)="_hiddenClear($event)" >
     <div class="ant-select-selection__placeholder" [hidden]="!_optionListShow">{{nzPlaceHolder}}</div>
@@ -13,14 +14,25 @@
     <span class="ant-select-arrow" [hidden]="_clearIcon"></span>
   </div>
 
-  <div class="select-options-content" *ngIf="_optionListShow">
-    <ul class="search-dropdown-menu" >
-      <!--<ng-content></ng-content>-->
-      <li *ngIf="isNotFoundDisplay" class="not-found">{{nzNotFoundContent}}</li>
-      <li *ngFor="let item of data; let i = index" (click)="_updateSelectedOption(item)"
-          [class.item-selected]="selectedIndex === i"
-          [class.item-keydown-selected]="keyDownIndex === i"
-      >{{item[nzOptionLabel]}}</li>
-    </ul>
-  </div>
+
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayHasBackdrop]="true"
+    [cdkConnectedOverlayOrigin]="cdkOverlayOrigin"
+    (backdropClick)="closeDropDown()"
+    (detach)="closeDropDown()"
+    [cdkConnectedOverlayOpen]="!isDestroy"
+  >
+    <div class="select-options-content">
+      <ul class="search-dropdown-menu" >
+        <!--<ng-content></ng-content>-->
+        <li *ngIf="isNotFoundDisplay" class="not-found">{{nzNotFoundContent}}</li>
+        <li *ngFor="let item of data; let i = index" (click)="_updateSelectedOption(item)"
+            [class.item-selected]="selectedIndex === i"
+            [class.item-keydown-selected]="keyDownIndex === i"
+        >{{item[nzOptionLabel]}}</li>
+      </ul>
+    </div>
+  </ng-template>
 </div>

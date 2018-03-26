@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter,
   Renderer2, OnDestroy, AfterViewInit, HostListener, ViewChild, ElementRef, NgZone} from '@angular/core';
-import { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import { coerceBooleanProperty} from '@angular/cdk/coercion';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
@@ -20,44 +19,11 @@ export class SearchSelectComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedIndex = 0; // 已选择项option索引
   keyDownIndex = 0; // 键盘上下选择索引
   _optionListShow = false; // option list 下拉框是否展开
-  isDestroy = true;
   private _documentListen: Function; // document事件解绑函数
   private _initialized = false; // OnInit`钩子是否已经执行过
   private _sub$: any;
   _searchVal: string;
   @ViewChild('inputElement') inpElementRef: ElementRef;
-  @ViewChild(CdkOverlayOrigin) cdkOverlayOrigin: CdkOverlayOrigin;
-  @ViewChild(CdkConnectedOverlay) cdkConnectedOverlay: CdkConnectedOverlay;
-  private overlayMinWidth;
-  closeDropDown(){
-    console.log("closeDropDown");
-    if (this._optionListShow) {
-      this._optionListShow = false;
-      this.updateCdkConnectedOverlayStatus();
-      this.nzOpenChange.emit(this._optionListShow);
-    }
-  }
-  updateCdkConnectedOverlayStatus(): void {
-    debugger;
-    if (this._initialized && this._optionListShow && this.cdkOverlayOrigin) {
-        this.overlayMinWidth = this.cdkOverlayOrigin.elementRef.nativeElement.getBoundingClientRect().width;
-        this.cdkConnectedOverlay.overlayRef.updateSize({ minWidth: this.overlayMinWidth });
-    }
-    this.updateCdkConnectedOverlayPositions();
-    if (this.cdkConnectedOverlay && this.cdkConnectedOverlay.overlayRef && this.cdkConnectedOverlay.overlayRef.backdropElement) {
-      if (this._optionListShow) {
-        this._renderer.removeStyle(this.cdkConnectedOverlay.overlayRef.backdropElement, 'display');
-      } else {
-        this._renderer.setStyle(this.cdkConnectedOverlay.overlayRef.backdropElement, 'display', 'none');
-      }
-    }
-  }
-  updateCdkConnectedOverlayPositions(): void {
-    /** wait for input size change **/
-    setTimeout(() => this.cdkConnectedOverlay.overlayRef.updatePosition(), 160);
-  }
-
-
   @Output()
   nzSearchChange: EventEmitter<any> = new EventEmitter<any>();
   @Output()
@@ -141,18 +107,31 @@ export class SearchSelectComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.value) {
       this._initSelectOption();
     }
-    Promise.resolve().then(() => this.updateCdkConnectedOverlayStatus());
   }
 
   @HostListener('click', ['$event'])
   _toggleClick(event: Event) {
+    event.stopPropagation();
     if (this._disabled) {
       return;
     }
     this._clearIcon = false;
     this._optionListShow = !this._optionListShow;
-    this.updateCdkConnectedOverlayStatus();
-
+    if (this._optionListShow) {
+      this.nzPlaceHolder = this.value;
+      this.keyDownIndex = this.selectedIndex;
+      this._documentListen = this._renderer.listen('document', 'click', () => {
+        this._optionListShow = false;
+        this._documentListen();
+        this._documentListen = null;
+      });
+      setTimeout(() => {
+        this.inpElementRef.nativeElement.value = '';
+        this.inpElementRef.nativeElement.focus();
+      }, 0);
+    }else {
+      this._documentListen();
+    }
     this.nzOpenChange.emit(this._optionListShow);
   }
 
@@ -188,7 +167,6 @@ export class SearchSelectComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this._initialized = true;
-    this.isDestroy = false;
     this._sub$ = Observable.fromEvent<KeyboardEvent>(this.inpElementRef.nativeElement, 'keyup')
       .map((e: any) => e.target.value)
       // .filter((text: string) => text!='')
@@ -243,7 +221,6 @@ export class SearchSelectComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.isDestroy = true;
     this._sub$.unsubscribe();
     if (this._documentListen) {
       this._documentListen();

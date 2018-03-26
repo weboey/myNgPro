@@ -76,56 +76,57 @@
       width: 0;
     }
   }
+  .select-options-content{
+    background-color: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    box-sizing: border-box;
+    z-index: 1000;
+    top: 28px;
+    left: 0;
+    position: absolute;
+    outline: none;
+    overflow: hidden;
+    font-size: 12px;
+    width: 100%;
+    ul.search-dropdown-menu{
+      outline: none;
+      margin-bottom: 0;
+      padding-left: 0;
+      list-style: none;
+      max-height: 250px;
+      overflow: auto;
+      background-color: #191a1a;
+      li{
+        color: #f9ecd5!important;
+        line-height: 1.5;
+        position: relative;
+        display: block;
+        padding: 7px 8px;
+        font-weight: normal;
+        white-space: nowrap;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background 0.3s ease;
+        &.not-found{
+          cursor: not-allowed;
+        }
+        &:hover:not(.not-found){
+          background-color: #196161;
+        }
+        &.item-keydown-selected{
+          background-color: #196161;
+        }
+        &.item-selected{
+          background-color: #194141;
+        }
+      }
+    }
+  }
   &.select-open .ant-select-arrow:before {
     transform: rotate(180deg);
   }
 }
-.select-options-content{
-  background-color: #fff;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  box-sizing: border-box;
-  z-index: 1000;
-  top: 28px;
-  left: 0;
-  position: absolute;
-  outline: none;
-  overflow: hidden;
-  font-size: 12px;
-  width: 100%;
-  ul.search-dropdown-menu{
-    outline: none;
-    margin-bottom: 0;
-    padding-left: 0;
-    list-style: none;
-    max-height: 250px;
-    overflow: auto;
-    background-color: #191a1a;
-    li{
-      color: #f9ecd5!important;
-      line-height: 1.5;
-      position: relative;
-      display: block;
-      padding: 7px 8px;
-      font-weight: normal;
-      white-space: nowrap;
-      cursor: pointer;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: background 0.3s ease;
-      &.not-found{
-        cursor: not-allowed;
-      }
-      &:hover:not(.not-found){
-        background-color: #196161;
-      }
-      &.item-keydown-selected{
-        background-color: #196161;
-      }
-      &.item-selected{
-        background-color: #194141;
-      }
-    }
-  }
-}
+
 

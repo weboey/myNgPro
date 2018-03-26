@@ -38,17 +38,21 @@
       </ng-container>
     </nz-select>
   </div>
-  <nz-tooltip [nzTitle]="initVal.name">
-    <app-search-select style="width: 220px;" (nzSearchChange)="doSearch($event)" (nzOpenChange)="doOpen($event)"
-                       (nzModelChange)="change($event)"
-                       [nz-tooltip]=""
-                       nzAllowClear
-                       [(value)]="initVal.name"
-                       [nzDisabled]="isDisable"
-                       [data]="mockDate"
-                       [nzNotFoundContent]="'not found innn'" [nzPlaceHolder]="'please select search'"  [nzOptionLabel]="'bond_shortname'">
-    </app-search-select>
-  </nz-tooltip>
+
+  <div style="height: 200px;overflow: hidden">
+    <nz-tooltip [nzTitle]="initVal.name">
+      <app-search-select style="width: 220px;" (nzSearchChange)="doSearch($event)" (nzOpenChange)="doOpen($event)"
+                         (nzModelChange)="change($event)"
+                         [nz-tooltip]=""
+                         nzAllowClear
+                         [(value)]="initVal.name"
+                         [nzDisabled]="isDisable"
+                         [data]="mockDate"
+                         [nzNotFoundContent]="'not found innn'" [nzPlaceHolder]="'please select search'"  [nzOptionLabel]="'bond_shortname'">
+      </app-search-select>
+    </nz-tooltip>
+  </div>
+
 
   {{initVal.name}}
   <button (click)="test()">change</button>

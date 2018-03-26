@@ -6,9 +6,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { AppComponent } from './app.component';
 import { InputTooltipComponent } from './input/input-tooltip/input-tooltip.component';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { SelectSearchComponent } from './select-search/select-search.component';
 import { SearchSelectComponent } from './search-select/search-select.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +19,7 @@ import { SearchSelectComponent } from './search-select/search-select.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule,
+    HttpClientModule, OverlayModule,
     BrowserAnimationsModule,
     NgZorroAntdModule.forRoot()
   ],
